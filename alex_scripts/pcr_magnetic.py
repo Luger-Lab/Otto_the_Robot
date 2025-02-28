@@ -52,15 +52,15 @@ def setup(protocol: protocol_api.ProtocolContext):
 def distribute(protocol: protocol_api.ProtocolContext):
     """Pools all PCR solution into the first column of the deepwell plate and adds magnetic beads. """
     p300m.pick_up_tip()
-    dest_wells = deepwell.columns()[0]  # First column (8 wells)
-    src_wells = pcr_block.columns()  # Get PCR samples as columns
+    dest_wells = deepwell.wells()[0]  # First column
+    src_wells = pcr_block.wells()
     
-    for i, dest in enumerate(dest_wells):  # Loop over 8 destination wells
-        for j in range(12):  # 12 columns in PCR block
-            p300m.transfer(100, src_wells[j][i], dest, new_tip='never')  # Transfer from aligned wells
+    for i, dest in enumerate(dest_wells):
+        for j in range(12):  # 12 wells per destination
+            p300m.transfer(100, src_wells[i * 12 + j], dest, new_tip='never')
     p300m.drop_tip()
 
-    # Add SPRI beads (0.6X of 1.2mL = 720uL per well).
+    # Add SPRI beads (0.6X of 1.2mL = 720uL per well). Volume can be changed based on DNA size selection.
     p300m.pick_up_tip()
     for well in dest_wells:
         p300m.transfer(720, beads, well, mix_after=(5, 300), new_tip='never')
@@ -75,7 +75,7 @@ def clean_up(protocol: protocol_api.ProtocolContext):
     
     # Remove supernatant leaving ~100uL. May need to adjust z not not pick up beads.
     p300m.pick_up_tip()
-    for well in deepwell.wells()[:7]:
+    for well in deepwell.wells()[0]:
         p300m.transfer(1820, well, pcr_waste, new_tip='never')
     p300m.drop_tip()
 
@@ -84,7 +84,7 @@ def clean_up(protocol: protocol_api.ProtocolContext):
 
     # Consolidate PCR into resevoir.
     p300m.pick_up_tip()
-    for well in deepwell.wells()[:7]:
+    for well in deepwell.wells()[0]:
         p300m.transfer(100, well, pcr_consolidate, new_tip='never')
     p300m.drop_tip()
 
@@ -138,7 +138,7 @@ def elution(protocol: protocol_api.ProtocolContext):
     
     # Transfer eluted DNA to a different deepwell.
     p20m.pick_up_tip()
-    p20m.transfer(30, deepwell.wells()[0], deepwell.wells()[8], new_tip='never')
+    p20m.transfer(30, deepwell.wells()[0], deepwell.wells()[1], new_tip='never')
     p20m.drop_tip()
     
     # Disengage magnet after elution
