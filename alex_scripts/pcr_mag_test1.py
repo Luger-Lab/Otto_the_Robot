@@ -52,7 +52,7 @@ def setup(protocol: protocol_api.ProtocolContext):
 def distribute(protocol: protocol_api.ProtocolContext):
     """Pools all PCR solution into the first well (A1) of the deepwell plate and adds magnetic beads."""
     
-    dest_well = deepwell.wells()[1]  # Target A1 in the deepwell plate
+    dest_well = deepwell.wells()[0]  # Target A1 in the deepwell plate
 
     p300m.pick_up_tip()  # Pick up a single tip before starting
 
