@@ -12,11 +12,10 @@ metadata = {
     'apiLevel': '2.18'
 }
 
-def run(protocol: protocol_api.ProtocolContext):
+def run(protocol):
     strobe(12, 8, True, protocol)
     setup(protocol)
     distribute(protocol)
-    clean_up(protocol)
     strobe(12, 8, False, protocol)
 
 def strobe(blinks, hz, leave_on, protocol):
@@ -53,15 +52,15 @@ def setup(protocol: protocol_api.ProtocolContext):
 def distribute(protocol: protocol_api.ProtocolContext):
     """Pools all PCR solution into the first column of the deepwell plate and adds magnetic beads. """
     p300m.pick_up_tip()
-    dest_wells = deepwell.wells()[:7]  # First column (8 wells)
-    src_wells = pcr_block.wells()
+    dest_wells = deepwell.columns()[0]  # First column (8 wells)
+    src_wells = pcr_block.columns()  # Get PCR samples as columns
     
-    for i, dest in enumerate(dest_wells):
-        for j in range(11):  # 12 wells per destination
-            p300m.transfer(100, src_wells[i * 11 + j], dest, new_tip='never')
+    for i, dest in enumerate(dest_wells):  # Loop over 8 destination wells
+        for j in range(12):  # 12 columns in PCR block
+            p300m.transfer(100, src_wells[j][i], dest, new_tip='never')  # Transfer from aligned wells
     p300m.drop_tip()
 
-    # Add SPRI beads (0.6X of 1.2mL = 720uL per well). Volume can be changed based on DNA size selection.
+    # Add SPRI beads (0.6X of 1.2mL = 720uL per well).
     p300m.pick_up_tip()
     for well in dest_wells:
         p300m.transfer(720, beads, well, mix_after=(5, 300), new_tip='never')
