@@ -52,15 +52,17 @@ def setup(protocol: protocol_api.ProtocolContext):
 def distribute(protocol: protocol_api.ProtocolContext):
     """Pools all PCR solution into the first column of the deepwell plate and adds magnetic beads. """
     p300m.pick_up_tip()
-    dest_wells = deepwell.wells()[0] 
-    src_wells = pcr_block.wells()
-    p300m.transfer(100, src_wells, dest_wells, new_tip="never")
-    p300m.drop_tip()
+    dest_wells = deepwell.wells()[0]
+    src_rows = pcr_block.rows()
 
-    # Add SPRI beads (720uL per well)
-    p300m.pick_up_tip()
-    p300m.transfer(720, beads, dest_wells, mix_after=(5, 300), new_tip='never')
+    for row in src_rows:
+    p300m.transfer(100, row, dest_wells, new_tip='never')
     p300m.drop_tip()
+    
 
-    protocol.delay(minutes=1)  # Incubation for bead binding. Change to 5 after testing
+    
+
+
+
+
 
