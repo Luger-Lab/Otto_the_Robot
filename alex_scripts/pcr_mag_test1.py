@@ -50,15 +50,16 @@ def setup(protocol: protocol_api.ProtocolContext):
     pcr_consolidate = res.wells()[7]
 
 def distribute(protocol: protocol_api.ProtocolContext):
-    """Pools all PCR solution into the first column of the deepwell plate and adds magnetic beads. """
-    p300m.pick_up_tip()
-    dest_wells = deepwell.wells()[0]
-    src_rows = pcr_block.rows()
-
-    for row in src_rows:
-    p300m.transfer(100, row, dest_wells, new_tip='never')
-    p300m.drop_tip()
+    """Pools all PCR solution into the first well (A1) of the deepwell plate and adds magnetic beads."""
     
+    dest_well = deepwell.wells()[0]  # Target A1 in the deepwell plate
+
+    p300m.pick_up_tip()  # Pick up a single tip before starting
+
+    for row in pcr_block.rows():  # Loop through all 12 rows (A1-H1, A2-H2, ..., A12-H12)
+        p300m.transfer(100, row, dest_well, new_tip='never')  # Transfer 100 µL from each row to A1
+
+    p300m.drop_tip()  # Drop the tip after finishing all rows
 
     
 
