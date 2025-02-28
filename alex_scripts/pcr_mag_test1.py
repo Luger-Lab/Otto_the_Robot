@@ -42,17 +42,17 @@ def setup(protocol: protocol_api.ProtocolContext):
 
     # Liquids setup
     global beads, etoh1, elute, pcr_waste, etoh_waste, pcr_consolidate
-    beads = res.wells()["A1"]
-    etoh1 = res.wells()["A2"]
-    elute = res.wells()["A3"]
-    pcr_waste = res.wells()["A5"]
-    etoh_waste = res.wells()["A6"]
-    pcr_consolidate = res.wells()["A8"]
+    beads = res.wells()[0]
+    etoh1 = res.wells()[1]
+    elute = res.wells()[2]
+    pcr_waste = res.wells()[4]
+    etoh_waste = res.wells()[5]
+    pcr_consolidate = res.wells()[7]
 
 def distribute(protocol: protocol_api.ProtocolContext):
     """Pools all PCR solution into the first column of the deepwell plate and adds magnetic beads. """
     p300m.pick_up_tip()
-    dest_wells = deepwell.wells()["A1"] 
+    dest_wells = deepwell.wells()[0] 
     src_wells = pcr_block.wells()
     p300m.transfer(100, src_wells, dest_wells, new_tip="never")
     p300m.drop_tip()
