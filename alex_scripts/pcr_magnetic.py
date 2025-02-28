@@ -55,8 +55,13 @@ def distribute(protocol: protocol_api.ProtocolContext):
     dest_wells = deepwell.wells()[:8]  # First column (8 wells)
     src_wells = pcr_block.wells()
     
-    for i, dest in enumerate(dest_wells):
-        p300m.transfer(100, src_wells[i], dest, new_tip='never')
+    # Loop through each of the 12 rows in the PCR block (12 rows * 8 columns = 96 wells)
+    for row in range(12):  # 12 rows in PCR block
+        # For each row, transfer the PCR solution from all 8 wells in that row to the corresponding destination well in the deepwell plate
+        for i in range(8):  # 8 wells in each row
+            # Transfer 100uL from each source well to the corresponding destination well
+            p300m.transfer(100, src_wells[row * 8 + i], dest_wells[i], new_tip='never')
+
     p300m.drop_tip()
 
     # Add SPRI beads (720uL per well)
