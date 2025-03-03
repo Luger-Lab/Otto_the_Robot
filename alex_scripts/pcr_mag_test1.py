@@ -1,9 +1,5 @@
 from opentrons import protocol_api
 import time
-import math
-import sys
-import random
-import subprocess
 
 metadata = {
     'protocolName': 'PCR Mag Bead Clean Up 400>600bp',
@@ -28,6 +24,7 @@ def strobe(blinks, hz, leave_on, protocol):
         i += 1
     protocol.set_rail_lights(leave_on)
 
+
 def setup(protocol: protocol_api.ProtocolContext):
     # Equipment setup
     global mag_mod, deepwell, pcr_block, res, tips300, tips20, p300m, p20m
@@ -40,26 +37,32 @@ def setup(protocol: protocol_api.ProtocolContext):
     p300m = protocol.load_instrument('p300_multi_gen2', 'left', tip_racks=[tips300])
     p20m = protocol.load_instrument('p20_multi_gen2', 'right', tip_racks=[tips20])
 
-    # Liquids setup
-    global beads, etoh1, elute, pcr_waste, etoh_waste, pcr_consolidate
-    beads = res.wells()[1]
-    etoh1 = res.wells()[2]
-    elute = res.wells()[3]
-    pcr_waste = res.wells()[5]
-    etoh_waste = res.wells()[6]
-    pcr_consolidate = res.wells()[8]
+    # Liquids location
+    global beads, etoh, eluteb, pcr_waste, etoh_waste, pcr_consolidate, pcr_sample
+    beads = res.wells()[0]
+    beads = protocol.define_liquid(name="Beckman SPRI Magnetic Beads", display_color="#351c75" )
+    etoh = res.wells()[1]
+    etoh = protocol.define_liquid(name="85 percent Ethanol", display_color="#35edff")
+    eluteb = res.wells()[2]
+    eluteb = protocol.define_liquid(name="Elution Buffer (10mM Tris, 0.1mM EDTA)", display_color="#ffee99")
+    pcr_waste = res.wells()[4]
+    etoh_waste = res.wells()[5]
+    pcr_consolidate = res.wells()[7]
+    pcr_sample = pcr_block.wells()
+    pcr_sample = protocol.define_liquid(name="PCR Sample", display_color="#226300")
 
-def distribute(protocol: protocol_api.ProtocolContext):
-    """Pools all PCR solution into the first well (A1) of the deepwell plate and adds magnetic beads."""
+def consolidate_pcr(protocol: protocol_api.ProtocolContext):
+    """Pools all PCR solution into the first column of the deepwell plate and adds magnetic beads. """
+    p300m.consolidate(100, pcr_block.columns(), deepwell.columns()[0])
+
+
+
+
     
-    dest_well = deepwell.wells()[0]  # Target A1 in the deepwell plate
 
-    p300m.pick_up_tip()  # Pick up a single tip before starting
 
-    for col in pcr_block.columns():  # Loop through all 8 columns
-        p300m.transfer(100, col, dest_well, new_tip='never')  # Transfer 100 µL from each row to A1
 
-    p300m.drop_tip()  # Drop the tip after finishing all rows
+    
 
     
 
