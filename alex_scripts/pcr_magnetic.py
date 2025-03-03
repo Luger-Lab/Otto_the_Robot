@@ -63,9 +63,8 @@ def distribute(protocol: protocol_api.ProtocolContext):
 
     #remove majority of pcr supernatant
     p300m.pick_up_tip()
-    p300m.aspirate(1820, deepwell.well(0).bottom(2))
-    
-    p300m.dispense(1820, pcr_waste)
+    p300m.aspirate(300, deepwell.well(0).bottom(2))
+    p300m.dispense(300, pcr_waste)
     
     # disengage magnet for consolidation
     mag_mod.disengage()
