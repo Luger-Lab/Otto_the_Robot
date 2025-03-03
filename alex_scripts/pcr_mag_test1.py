@@ -40,16 +40,12 @@ def setup(protocol: protocol_api.ProtocolContext):
     # Liquids location
     global beads, etoh, eluteb, pcr_waste, etoh_waste, pcr_consolidate, pcr_sample
     beads = res.wells()[0]
-    beads = protocol.define_liquid(name="Beckman SPRI Magnetic Beads", description="None", display_color="#351c75" )
     etoh = res.wells()[1]
-    etoh = protocol.define_liquid(name="85 percent Ethanol", description="None", display_color="#35edff")
     eluteb = res.wells()[2]
-    eluteb = protocol.define_liquid(name="Elution Buffer (10mM Tris, 0.1mM EDTA)", description="None", display_color="#ffee99")
-    pcr_waste = res.wells()[4]
     etoh_waste = res.wells()[5]
     pcr_consolidate = res.wells()[7]
     pcr_sample = pcr_block.wells()
-    pcr_sample = protocol.define_liquid(name="PCR Sample", display_color="#226300")
+
 
 def consolidate_pcr(protocol: protocol_api.ProtocolContext):
     """Pools all PCR solution into the first column of the deepwell plate and adds magnetic beads. """
