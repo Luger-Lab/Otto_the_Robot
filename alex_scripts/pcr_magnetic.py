@@ -50,8 +50,10 @@ def setup(protocol: protocol_api.ProtocolContext):
     pcr_consolidate = res.wells()[7]
 
 def distribute(protocol: protocol_api.ProtocolContext):
-    """Pools all PCR solution into the first column of the deepwell plate and adds magnetic beads. """
-    # consolidate pcr tubes to deepwell block
+    # consolidate all pcr tubes to first column deepwell block (~1.2mL/well)
     p300m.consolidate(100, pcr_block.columns(), deepwell.columns()[0])
 
-    protocol.delay(seconds=10)  # Incubation for bead binding. Change to 5 after testing
+    # add SPRI beads (0.6X * 1.2mL = 720uL per well, ~1.9mL/well)
+    p300m.transfer(720, beads, deepwell.columns()[0], mix_after=(5, 300))
+    protocol.delay(seconds=10)  # Incubation for bead binding. Change to 5 mins after testing
+
