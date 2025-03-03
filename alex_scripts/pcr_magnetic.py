@@ -50,13 +50,11 @@ def setup(protocol: protocol_api.ProtocolContext):
     pcr_consolidate = res.wells()[7]
 
 def distribute(protocol: protocol_api.ProtocolContext):
-    deepwell0 = deepwell.columns()[0]
-
     # consolidate all pcr tubes to first column deepwell block (~1.2mL/well)
-    p300m.consolidate(100, pcr_block.columns(), deepwell0)
+    p300m.consolidate(100, pcr_block.columns(), deepwell.columns()[0])
 
     # add SPRI beads (0.6X * 1.2mL = 720uL per well, ~1.9mL/well)
-    p300m.transfer(720, beads, deepwell0, mix_after=(3, 300))
+    p300m.transfer(720, beads, deepwell.columns()[0], mix_after=(3, 300))
     protocol.delay(seconds=10)  # Incubation for bead binding. Change to 5 mins after testing
     
     # engage magnets
@@ -64,11 +62,10 @@ def distribute(protocol: protocol_api.ProtocolContext):
     protocol.delay(seconds=10)  # Allow beads to separate. Change to 2+ after test 
 
     #remove majority of pcr supernatant
-    deepwell_depth = deepwell.bottom(2)
-
-    p300m.transfer(1820, deepwell_depth, pcr_waste)
+    p300m.pick_up_tip()
+    p300m.aspirate(1820, deepwell.well(0).bottom(2))
+    
+    p300m.dispense(1820, pcr_waste)
     
     # disengage magnet for consolidation
     mag_mod.disengage()
-
-
