@@ -15,7 +15,7 @@ metadata = {
 def run(protocol):
     strobe(12, 8, True, protocol)
     setup(protocol)
-    distribute(protocol)
+    distribute(deepwell, protocol)
     strobe(12, 8, False, protocol)
 
 def strobe(blinks, hz, leave_on, protocol):
@@ -49,7 +49,7 @@ def setup(protocol: protocol_api.ProtocolContext):
     etoh_waste = res.wells()[5]
     pcr_consolidate = res.wells()[7]
 
-def distribute(protocol: protocol_api.ProtocolContext):
+def distribute(deepwell, protocol: protocol_api.ProtocolContext):
     deepwell = deepwell.columns()[0]
 
     # consolidate all pcr tubes to first column deepwell block (~1.2mL/well)
