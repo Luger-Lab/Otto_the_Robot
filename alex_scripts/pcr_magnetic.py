@@ -15,7 +15,7 @@ metadata = {
 def run(protocol):
     strobe(12, 8, True, protocol)
     setup(protocol)
-    distribute(deepwell, protocol)
+    distribute(protocol)
     strobe(12, 8, False, protocol)
 
 def strobe(blinks, hz, leave_on, protocol):
@@ -49,14 +49,14 @@ def setup(protocol: protocol_api.ProtocolContext):
     etoh_waste = res.wells()[5]
     pcr_consolidate = res.wells()[7]
 
-def distribute(deepwell, protocol: protocol_api.ProtocolContext):
-    deepwell = deepwell.columns()[0]
+def distribute(protocol: protocol_api.ProtocolContext):
+    deepwell0 = deepwell.columns()[0]
 
     # consolidate all pcr tubes to first column deepwell block (~1.2mL/well)
-    p300m.consolidate(100, pcr_block.columns(), deepwell)
+    p300m.consolidate(100, pcr_block.columns(), deepwell0)
 
     # add SPRI beads (0.6X * 1.2mL = 720uL per well, ~1.9mL/well)
-    p300m.transfer(720, beads, deepwell, mix_after=(3, 300))
+    p300m.transfer(720, beads, deepwell0, mix_after=(3, 300))
     protocol.delay(seconds=10)  # Incubation for bead binding. Change to 5 mins after testing
     
     # engage magnets
@@ -65,6 +65,7 @@ def distribute(deepwell, protocol: protocol_api.ProtocolContext):
 
     #remove majority of pcr supernatant
     deepwell_depth = deepwell.bottom(2)
+
     p300m.transfer(1820, deepwell_depth, pcr_waste)
     
     # disengage magnet for consolidation
