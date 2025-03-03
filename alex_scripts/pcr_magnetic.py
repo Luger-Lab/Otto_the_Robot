@@ -54,6 +54,7 @@ def distribute(protocol: protocol_api.ProtocolContext):
     p300m.consolidate(100, pcr_block.columns(), deepwell.columns()[0])
 
     # add SPRI beads (0.6X * 1.2mL = 720uL per well, ~1.9mL/well)
+    p300m.pick_up_tip()
     p300m.transfer(720, beads, deepwell.columns()[0], new_tip='never')
     p300m.mix(5, 300, deepwell.columns()[0])
     p300m.drop_tip()
