@@ -47,7 +47,7 @@ def setup(protocol: protocol_api.ProtocolContext):
     pcr_sample = pcr_block.wells()
 
 
-def consolidate_pcr(protocol: protocol_api.ProtocolContext):
+def distribute(protocol: protocol_api.ProtocolContext):
     """Pools all PCR solution into the first column of the deepwell plate and adds magnetic beads. """
     p300m.consolidate(100, pcr_block.columns(), deepwell.columns()[0])
 
