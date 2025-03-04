@@ -70,7 +70,7 @@ def distribute(protocol: protocol_api.ProtocolContext):
     #mag_mod.disengage()
 
     #consolidate in res then move back to 1 well. one tip
-    p300m.aspirate(100, deepwell.columns()[0])
+    p300m.aspirate(100, deepwell.well(0))
     p300m.dispense(100, pcr_consolidate)
     p300m.drop_tip()
 
