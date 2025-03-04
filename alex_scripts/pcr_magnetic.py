@@ -72,10 +72,10 @@ def distribute(protocol: protocol_api.ProtocolContext):
 
     #consolidate in res then move back to 1 well. all tips
     p300m.pick_up_tip()
-    p300m.aspirate(100, deepwell.column()[0])
+    p300m.aspirate(100, deepwell.columns()[0])
     p300m.dispense(100, pcr_consolidate)
     p300m.drop_tip()
-    
+
     # move back to 1 deepwell. one tip
     p300m.transfer(800, pcr_consolidate, deepwell.columns()[0])
 
