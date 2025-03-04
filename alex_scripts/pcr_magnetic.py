@@ -74,14 +74,14 @@ def distribute(protocol: protocol_api.ProtocolContext):
     p300m.drop_tip()
 
     # move back to 1 deepwell. one tip
-    p300m.transfer(800, pcr_consolidate, deepwell.columns()[0])
-
+    p300m.pick_up_tip()
+    for _ in range(4):
+        p300m.aspirate(200, pcr_consolidate)
+        p300m.dispense(200, deepwell.well(0))
     # engage magnets
     #mag_mod.engage()
-    #protocol.delay(seconds=10)  # Allow beads to separate. Change to 2 mins+ after test 
-
-    #remove 770uL of pcr supernatant. one tip
-    p300m.pick_up_tip()
+    #protocol.delay(seconds=10)  # Allow beads to separate. Change to 2 mins+ after test
+    #remove 770uL of pcr supernatant. 
     for _ in range(5):
         p300m.aspirate(154, deepwell.well(0).bottom(6))
         p300m.dispense(154, pcr_waste)
