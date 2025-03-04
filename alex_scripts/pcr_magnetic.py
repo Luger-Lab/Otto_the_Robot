@@ -59,7 +59,7 @@ def distribute(protocol: protocol_api.ProtocolContext):
     
     # engage magnets
     #mag_mod.engage() 
-    #protocol.delay(seconds=10)  # Allow beads to separate. Change to 2+ after test 
+    protocol.delay(seconds=10)  # Allow beads to separate. Change to 2+ after test 
 
     #remove majority of pcr supernatant.  all 8 tips
     p300m.pick_up_tip()
@@ -80,12 +80,37 @@ def distribute(protocol: protocol_api.ProtocolContext):
         p300m.dispense(200, deepwell.well(0))
     # engage magnets
     #mag_mod.engage()
-    #protocol.delay(seconds=10)  # Allow beads to separate. Change to 2 mins+ after test
+    protocol.delay(seconds=10)  # Allow beads to separate. Change to 2 mins+ after test
     #remove 770uL of pcr supernatant. 
     for _ in range(5):
         p300m.aspirate(154, deepwell.well(0).bottom(6))
         p300m.dispense(154, pcr_waste)
     p300m.drop_tip()
+
+    #ethanol wash 1. one tip
+    p300m.pick_up_tip()
+    for _ in range(2):
+        p300m.aspirate(300, etoh1)
+        p300m.dispense(300, deepwell.well(0).bottom(6))
+    protocol.delay(seconds=10) #change to 2+ mins after test
+    for _ in range(2):
+        p300m.aspirate(300, deepwell.well(0).bottom(6))
+        p300m.dispense(300, etoh_waste)
+    p300m.drop_tip
+
+    #ethanol wash 2. one tip
+    p300m.pick_up_tip()
+    for _ in range(2):
+        p300m.aspirate(300, etoh1)
+        p300m.dispense(300, deepwell.well(0).bottom(6))
+    protocol.delay(seconds=10) #change to 2+ mins after test
+    for _ in range(4):
+        p300m.aspirate(155, deepwell.well(0).bottom(4))
+        p300m.dispense(155, etoh_waste)
+    p300m.drop_tip
+
+    
+
 
 
 
