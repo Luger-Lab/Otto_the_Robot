@@ -87,7 +87,7 @@ def distribute(protocol: protocol_api.ProtocolContext):
         p300m.dispense(154, pcr_waste)
     p300m.drop_tip()
 
-    #ethanol wash 1. one tip
+    #ethanol wash 1. one tip no code in 102
     p300m.pick_up_tip()
     for _ in range(2):
         p300m.aspirate(300, etoh1)
@@ -97,10 +97,3 @@ def distribute(protocol: protocol_api.ProtocolContext):
         p300m.aspirate(300, deepwell.well(0).bottom(6))
         p300m.dispense(300, etoh_waste)
     p300m.drop_tip()
-
-
-    
-
-
-
-
