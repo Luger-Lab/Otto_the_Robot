@@ -66,12 +66,9 @@ def distribute(protocol: protocol_api.ProtocolContext):
     for _ in range(7):
         p300m.aspirate(260, deepwell.well(0).bottom(6))
         p300m.dispense(260, pcr_waste)
-    p300m.drop_tip()
-    # disengage magnet for consolidation
+    #disengage magnet for consolidation
     #mag_mod.disengage()
-
-    #consolidate in res then move back to 1 well. all tips
-    p300m.pick_up_tip()
+    #consolidate in res then move back to 1 well. 
     p300m.aspirate(100, deepwell.well(0))
     p300m.dispense(100, pcr_consolidate)
     p300m.drop_tip()
