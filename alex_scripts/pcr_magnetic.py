@@ -54,7 +54,7 @@ def distribute(protocol: protocol_api.ProtocolContext):
     p300m.consolidate(100, pcr_block.columns(), deepwell.columns()[0]) 
 
     # add SPRI beads (0.6X * 1.2mL = 720uL per well, ~1.9mL/well). all 8 tips
-    p300m.transfer(720, beads, deepwell.well(0).bottom(10), mix_after=(1, 300))
+    p300m.transfer(720, beads, deepwell.well(0).bottom(20), mix_after=(1, 300))
     protocol.delay(seconds=10)  # Incubation for bead binding. Change to 5 mins after testing
     
     # engage magnets
