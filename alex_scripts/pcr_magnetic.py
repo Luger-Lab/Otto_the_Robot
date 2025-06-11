@@ -54,20 +54,20 @@ def distribute(protocol: protocol_api.ProtocolContext):
     p300m.consolidate(100, pcr_block.columns(), deepwell.columns()[0]) 
 
     # add SPRI beads (0.6X * 1.2mL = 720uL per well, ~1.9mL/well). all 8 tips
-    p300m.transfer(720, beads, deepwell.columns()[0], mix_after=(1, 300))
+    p300m.transfer(720, beads, deepwell.well(0).bottom(10), mix_after=(1, 300))
     protocol.delay(seconds=10)  # Incubation for bead binding. Change to 5 mins after testing
     
     # engage magnets
-    #mag_mod.engage() 
+    mag_mod.engage() 
     protocol.delay(seconds=10)  # Allow beads to separate. Change to 2+ after test 
 
     #remove majority of pcr supernatant.  all 8 tips
     p300m.pick_up_tip()
     for _ in range(7):
-        p300m.aspirate(260, deepwell.well(0).bottom(6))
+        p300m.aspirate(260, deepwell.well(0).bottom(4))
         p300m.dispense(260, pcr_waste)
     #disengage magnet for consolidation
-    #mag_mod.disengage()
+    mag_mod.disengage()
     #consolidate in res then move back to 1 well. 
     p300m.aspirate(100, deepwell.well(0))
     p300m.dispense(100, pcr_consolidate)
@@ -79,7 +79,7 @@ def distribute(protocol: protocol_api.ProtocolContext):
         p300m.aspirate(200, pcr_consolidate)
         p300m.dispense(200, deepwell.well(0))
     # engage magnets
-    #mag_mod.engage()
+    mag_mod.engage()
     protocol.delay(seconds=10)  # Allow beads to separate. Change to 2 mins+ after test
     #remove 770uL of pcr supernatant. 
     for _ in range(5):
@@ -87,7 +87,7 @@ def distribute(protocol: protocol_api.ProtocolContext):
         p300m.dispense(154, pcr_waste)
     p300m.drop_tip()
 
-    #ethanol wash 1. one tip no code in 102
+    # ethanol wash 1. 
     p300m.pick_up_tip()
     for _ in range(2):
         p300m.aspirate(300, etoh1)
@@ -97,3 +97,18 @@ def distribute(protocol: protocol_api.ProtocolContext):
         p300m.aspirate(300, deepwell.well(0).bottom(6))
         p300m.dispense(300, etoh_waste)
     p300m.drop_tip()
+
+    # ethanol wash 2. 
+    p300m.pick_up_tip()
+    for _ in range(2):
+        p300m.aspirate(300, etoh1)
+        p300m.dispense(300, deepwell.well(0).bottom(6))
+    protocol.delay(seconds=10) #change to 2+ mins after test
+    for _ in range(4):
+        p300m.aspirate(155, deepwell.well(0).bottom(4))
+        p300m.dispense(155, etoh_waste)
+    p300m.drop_tip()
+
+    # elute
+    
+
