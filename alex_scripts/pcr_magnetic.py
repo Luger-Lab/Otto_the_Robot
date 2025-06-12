@@ -55,9 +55,8 @@ def distribute(protocol: protocol_api.ProtocolContext):
     protocol.delay(seconds=10)  # Incubation for bead binding. Change to 5 mins after testing
     
     # engage magnets
-    mag_mod.engage(offset=-4) 
+    mag_mod.engage(offset=-3) 
     protocol.delay(seconds=10)  # Allow beads to separate. Change to 2+ after test 
-    mag_mod.disengage #for now remove later
 
     #remove majority of pcr supernatant.  all 8 tips
     p300m.pick_up_tip()
@@ -65,14 +64,14 @@ def distribute(protocol: protocol_api.ProtocolContext):
         p300m.aspirate(289, deepwell.well(0).bottom(4))
         p300m.dispense(289, pcr_waste)
     for _ in range(4):
-        p300m.aspirate(289, deepwell.well(1).bottom(4))
+        p300m.aspirate(289, deepwell.well(8).bottom(4))
         p300m.dispense(289, pcr_waste)
     #disengage magnet for consolidation
     mag_mod.disengage()
     #consolidate in res then move back to 1 well. 
     p300m.aspirate(100, deepwell.well(0))
     p300m.dispense(100, pcr_consolidate)
-    p300m.aspirate(100, deepwell.well(1))
+    p300m.aspirate(100, deepwell.well(8))
     p300m.dispense(100, pcr_consolidate)
     p300m.drop_tip()
 
