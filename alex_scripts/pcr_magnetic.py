@@ -47,7 +47,7 @@ def setup(protocol: protocol_api.ProtocolContext):
 
 def distribute(protocol: protocol_api.ProtocolContext):
     # consolidate all pcr tubes to first two columns of deepwell block (~600uL/well). all 8 tips
-    p300m.consolidate(100, pcr_block.columns()[0:6], deepwell.columns()[0], new_tip='never')
+    p300m.consolidate(100, pcr_block.columns()[0:6], deepwell.columns()[0])
     p300m.consolidate(100, pcr_block.columns()[7:12], deepwell.columns()[1])
 
     # add SPRI beads (0.6X * 600uL = 360uL per well, ~960uL/well). all 8 tips
