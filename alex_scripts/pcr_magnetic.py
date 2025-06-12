@@ -1,9 +1,5 @@
 from opentrons import protocol_api
 import time
-import math
-import sys
-import random
-import subprocess
 
 metadata = {
     'protocolName': 'PCR Mag Bead Clean Up 400>600bp',
@@ -50,41 +46,47 @@ def setup(protocol: protocol_api.ProtocolContext):
     pcr_consolidate = res.wells()[7]
 
 def distribute(protocol: protocol_api.ProtocolContext):
-    # consolidate all pcr tubes to first column deepwell block (~1.2mL/well). all 8 tips
-    p300m.consolidate(100, pcr_block.columns(), deepwell.columns()[0]) 
+    # consolidate all pcr tubes to first two columns of deepwell block (~600uL/well). all 8 tips
+    p300m.consolidate(100, pcr_block.columns()[0:5], deepwell.columns()[0])
+    p300m.consolidate(100, pcr_block.columns()[6:12], deepwell.columns()[1])
 
-    # add SPRI beads (0.6X * 1.2mL = 720uL per well, ~1.9mL/well). all 8 tips
-    p300m.transfer(720, beads, deepwell.well(0).bottom(20), mix_after=(1, 300))
+    # add SPRI beads (0.6X * 600uL = 360uL per well, ~960uL/well). all 8 tips
+    p300m.transfer(360, beads, deepwell.columns()[0:1], mix_after=(1, 300))
     protocol.delay(seconds=10)  # Incubation for bead binding. Change to 5 mins after testing
     
     # engage magnets
-    mag_mod.engage() 
+    mag_mod.engage(offset=-2) 
     protocol.delay(seconds=10)  # Allow beads to separate. Change to 2+ after test 
 
     #remove majority of pcr supernatant.  all 8 tips
     p300m.pick_up_tip()
-    for _ in range(7):
-        p300m.aspirate(260, deepwell.well(0).bottom(4))
-        p300m.dispense(260, pcr_waste)
+    for _ in range(3):
+        p300m.aspirate(289, deepwell.well(0).bottom(4))
+        p300m.dispense(289, pcr_waste)
+    for _ in range(4):
+        p300m.aspirate(289, deepwell.well(1).bottom(4))
+        p300m.dispense(289, pcr_waste)
     #disengage magnet for consolidation
     mag_mod.disengage()
     #consolidate in res then move back to 1 well. 
     p300m.aspirate(100, deepwell.well(0))
     p300m.dispense(100, pcr_consolidate)
+    p300m.aspirate(100, deepwell.well(1))
+    p300m.dispense(100, pcr_consolidate)
     p300m.drop_tip()
 
     # move back to 1 deepwell. one tip
     p300m.pick_up_tip()
-    for _ in range(4):
-        p300m.aspirate(200, pcr_consolidate)
-        p300m.dispense(200, deepwell.well(0))
+    for _ in range(6):
+        p300m.aspirate(267, pcr_consolidate)
+        p300m.dispense(267, deepwell.well(0))
     # engage magnets
     mag_mod.engage()
     protocol.delay(seconds=10)  # Allow beads to separate. Change to 2 mins+ after test
-    #remove 770uL of pcr supernatant. 
+    #remove 1500uL of pcr supernatant. 
     for _ in range(5):
-        p300m.aspirate(154, deepwell.well(0).bottom(6))
-        p300m.dispense(154, pcr_waste)
+        p300m.aspirate(300, deepwell.well(0).bottom(2))
+        p300m.dispense(300, pcr_waste)
     p300m.drop_tip()
 
     # ethanol wash 1. 
